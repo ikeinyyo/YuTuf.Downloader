@@ -22,5 +22,17 @@ namespace YuTuf.Downloader.Client.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastDestinationFolder {
+            get {
+                return ((string)(this["LastDestinationFolder"]));
+            }
+            set {
+                this["LastDestinationFolder"] = value;
+            }
+        }
     }
 }

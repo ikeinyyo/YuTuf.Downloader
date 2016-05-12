@@ -38,7 +38,8 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Progress">
+                <DataGridTextColumn Header="Title"  Binding="{Binding Title}"  Width="*"/>
+                <DataGridTemplateColumn Header="Progress" Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ProgressBar Value="{Binding Progress}" Width="500" Height="20" />
