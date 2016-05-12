@@ -25,7 +25,7 @@
             </Grid.ColumnDefinitions>
             <TextBox x:Name="DestinationPath" IsEnabled="False" />
             <Button x:Name="SelectFolder" Grid.Column="2" Content="Select Folder" Click="OnSelectFolderClick"/>
-            <TextBox Grid.Row="2" x:Name="VideoUrl"  />
+            <TextBox Grid.Row="2" x:Name="VideoUrl" KeyUp="OnKeyUp"  />
             <Button x:Name="Download" Grid.Row="2" Grid.Column="2"  Content="Download" Click="OnDownloadClick" />
         </Grid>
 

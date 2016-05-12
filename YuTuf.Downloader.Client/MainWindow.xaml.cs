@@ -7,6 +7,7 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using WPFFolderBrowser;
 
 namespace YuTuf.Downloader.Client
@@ -55,9 +56,15 @@ namespace YuTuf.Downloader.Client
 
         private void OnDownloadClick(object sender, RoutedEventArgs e)
         {
+            DoDownloadVideo();
+        }
+
+        private void DoDownloadVideo()
+        {
             if (!string.IsNullOrWhiteSpace(VideoUrl.Text))
             {
                 var url = VideoUrl.Text;
+                VideoUrl.Text = string.Empty;
                 Task.Run(() => DownloadVideo(url));
             }
             else
@@ -92,13 +99,17 @@ namespace YuTuf.Downloader.Client
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
                 Debug.Write(ex.Message);
             }
         }
 
-        private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        private void OnKeyUp(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            throw new NotImplementedException();
+            if(e.Key == Key.Enter)
+            {
+                DoDownloadVideo();
+            }
         }
     }
 
