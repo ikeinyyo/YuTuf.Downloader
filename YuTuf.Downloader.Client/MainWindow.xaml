@@ -1,0 +1,38 @@
+﻿<Window x:Class="YuTuf.Downloader.Client.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:YuTuf.Downloader.Client"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="DestinationPath" IsEnabled="False" />
+            <Button x:Name="SelectFolder" Grid.Column="2" Content="Select Folder" Click="OnSelectFolderClick"/>
+            <TextBox Grid.Row="2" x:Name="VideoUrl"  />
+            <Button x:Name="Download" Grid.Row="2" Grid.Column="2"  Content="Download" />
+        </Grid>
+
+        <DataGrid x:Name="Videos" Grid.Row="1" AutoGenerateColumns="False" Margin="10">
+            <DataGrid.Columns >
+                <DataGridTextColumn Binding="{Binding Title}" Header="Title"/>
+                <DataGridCheckBoxColumn Binding="{Binding IsDownloaded}" Header="Is Downloaded"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
