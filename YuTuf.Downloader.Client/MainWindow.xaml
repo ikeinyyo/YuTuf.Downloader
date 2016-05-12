@@ -25,12 +25,18 @@
             <TextBox x:Name="DestinationPath" IsEnabled="False" />
             <Button x:Name="SelectFolder" Grid.Column="2" Content="Select Folder" Click="OnSelectFolderClick"/>
             <TextBox Grid.Row="2" x:Name="VideoUrl"  />
-            <Button x:Name="Download" Grid.Row="2" Grid.Column="2"  Content="Download" />
+            <Button x:Name="Download" Grid.Row="2" Grid.Column="2"  Content="Download" Click="OnDownloadClick" />
         </Grid>
 
-        <DataGrid x:Name="Videos" Grid.Row="1" AutoGenerateColumns="False" Margin="10">
+        <DataGrid x:Name="Videos" Grid.Row="1" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10">
             <DataGrid.Columns >
-                <DataGridTextColumn Binding="{Binding Title}" Header="Title"/>
+                <DataGridTemplateColumn Header="Image">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding Thumbnail}" Width="120" Height="90" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridCheckBoxColumn Binding="{Binding IsDownloaded}" Header="Is Downloaded"/>
             </DataGrid.Columns>
         </DataGrid>
