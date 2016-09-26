@@ -12,6 +12,8 @@ using System.Windows.Input;
 using System.Xml.Linq;
 using WPFFolderBrowser;
 using YuTuf.Downloader.Client.Properties;
+using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace YuTuf.Downloader.Client
 {
@@ -127,11 +129,13 @@ namespace YuTuf.Downloader.Client
             {
                 try
                 {
+                    client.Encoding = Encoding.UTF8;
                     var html = client.DownloadString(url);
                     HtmlDocument document = new HtmlDocument();
                     document.LoadHtml(html);
                     var node = document.GetElementbyId("eow-title");
-                    return node.InnerText.Replace("\n", string.Empty);
+                    var name = node.InnerText.Replace("\n", string.Empty);
+                    return ClearFileName(name);
                 }
                 catch (Exception ex)
                 {
@@ -140,6 +144,15 @@ namespace YuTuf.Downloader.Client
             }
 
             return string.Empty;
+        }
+
+        private string ClearFileName(string path)
+        {
+            foreach (var character in Path.GetInvalidFileNameChars())
+            {
+                path = path.Replace(character, '_');
+            }
+            return path;
         }
     }
 
@@ -157,18 +170,15 @@ namespace YuTuf.Downloader.Client
             set
             {
                 progress = value;
-                NotifyPropertyChanged("Progress");
+                NotifyPropertyChanged();
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged(string info)
+        private void NotifyPropertyChanged([CallerMemberName]string info = null)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
     }
 }
