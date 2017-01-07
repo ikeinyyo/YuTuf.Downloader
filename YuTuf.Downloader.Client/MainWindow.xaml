@@ -17,6 +17,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="10"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -27,6 +29,10 @@
             <Button x:Name="SelectFolder" Grid.Column="2" Content="Select Folder" Click="OnSelectFolderClick"/>
             <TextBox Grid.Row="2" x:Name="VideoUrl" KeyUp="OnKeyUp"  />
             <Button x:Name="Download" Grid.Row="2" Grid.Column="2"  Content="Download" Click="OnDownloadClick" />
+            <StackPanel Grid.Row="5" Orientation="Horizontal">
+                <RadioButton x:Name="VideoContent" Content="Video" IsChecked="True" GroupName="A"/>
+                <RadioButton x:Name="AudioContent" Content="Audio" GroupName="A" Margin="10,0,0,0"/>
+            </StackPanel>
         </Grid>
 
         <DataGrid x:Name="Videos" Grid.Row="1" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10">

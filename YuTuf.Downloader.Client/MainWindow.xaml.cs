@@ -14,6 +14,8 @@ using WPFFolderBrowser;
 using YuTuf.Downloader.Client.Properties;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Linq;
+using System.Windows.Threading;
 
 namespace YuTuf.Downloader.Client
 {
@@ -75,7 +77,8 @@ namespace YuTuf.Downloader.Client
             {
                 var url = VideoUrl.Text;
                 VideoUrl.Text = string.Empty;
-                Task.Run(() => DownloadVideo(url));
+                var isVideo = VideoContent.IsChecked.HasValue && VideoContent.IsChecked.Value;
+                Task.Run(() => DownloadVideo(url, isVideo));
             }
             else
             {
@@ -83,28 +86,43 @@ namespace YuTuf.Downloader.Client
             }
         }
 
-        private async Task DownloadVideo(string url)
+        private async Task DownloadVideo(string url, bool isVideo)
         {
             try
             {
                 var title = GetVideoTitle(url);
                 var id = url.Substring(url.IndexOf("watch?v=")).Replace("watch?v=", "");
                 var thumbnail = YouTube.GetThumbnailUri(id, YouTubeThumbnailSize.Small);
-                var youtubeVideo = await YouTube.GetVideoUriAsync(id, YouTubeQuality.QualityHigh);
+                var results = await YouTube.GetUrisAsync(id);
+
                 var video = new Video() { Thumbnail = thumbnail.OriginalString, Progress = 0, Title = title };
 
                 await Dispatcher.BeginInvoke((Action)(() =>
                 {
                     videos.Add(video);
                 }));
-
                 using (var client = new WebClient())
                 {
                     client.DownloadProgressChanged += (sender, e) =>
                     {
                         video.Progress = e.ProgressPercentage;
                     };
-                    client.DownloadFileAsync(youtubeVideo.Uri, Path.Combine(destinationPath, $"{video.Title}.mp4"));
+                    var file = isVideo ? results
+                        .Where(result => result.HasVideo && result.HasAudio)
+                        .OrderByDescending(result => result.VideoQuality)
+                        .FirstOrDefault() :
+                        results.Where(result => result.HasAudio && !result.HasVideo)
+                        .OrderByDescending(result => result.AudioQuality)
+                        .FirstOrDefault();
+
+                    if (file == null)
+                    {
+                        MessageBox.Show("No video or audi available");
+                        return;
+                    }
+
+                    var path = Path.Combine(destinationPath, isVideo ? $"{video.Title}.mp4" : $"{video.Title}.mp3");
+                    client.DownloadFileAsync(file.Uri, path);
                 }
 
             }
