@@ -35,7 +35,9 @@
             </StackPanel>
         </Grid>
 
-        <DataGrid x:Name="Videos" Grid.Row="1" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10">
+        <DataGrid x:Name="Videos" Grid.Row="1" 
+                  CanUserAddRows="False" 
+                  AutoGenerateColumns="False" Margin="10">
             <DataGrid.Columns >
                 <DataGridTemplateColumn Header="Image">
                     <DataGridTemplateColumn.CellTemplate>
@@ -49,6 +51,13 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ProgressBar Value="{Binding Progress}" Width="500" Height="20" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Open" Width="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button IsEnabled="{Binding IsCompleted}" Content="Open" Click="Button_Click"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

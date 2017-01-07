@@ -16,6 +16,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Linq;
 using System.Windows.Threading;
+using System.Windows.Controls;
 
 namespace YuTuf.Downloader.Client
 {
@@ -97,6 +98,8 @@ namespace YuTuf.Downloader.Client
 
                 var video = new Video() { Thumbnail = thumbnail.OriginalString, Progress = 0, Title = title };
 
+                video.Path = Path.Combine(destinationPath, isVideo ? $"{video.Title}.mp4" : $"{video.Title}.mp3");
+
                 await Dispatcher.BeginInvoke((Action)(() =>
                 {
                     videos.Add(video);
@@ -117,12 +120,11 @@ namespace YuTuf.Downloader.Client
 
                     if (file == null)
                     {
-                        MessageBox.Show("No video or audi available");
+                        MessageBox.Show("No video or audio available");
                         return;
                     }
 
-                    var path = Path.Combine(destinationPath, isVideo ? $"{video.Title}.mp4" : $"{video.Title}.mp3");
-                    client.DownloadFileAsync(file.Uri, path);
+                    client.DownloadFileAsync(file.Uri, video.Path);
                 }
 
             }
@@ -172,6 +174,19 @@ namespace YuTuf.Downloader.Client
             }
             return path;
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var button = sender as Button;
+                Process.Start(((Video)button.DataContext).Path);
+            }
+            catch (Exception ex)
+            {
+                Debug.Write(ex.Message);
+            }
+        }
     }
 
     public class Video : INotifyPropertyChanged
@@ -189,8 +204,13 @@ namespace YuTuf.Downloader.Client
             {
                 progress = value;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("IsCompleted");
             }
         }
+
+        public bool IsCompleted => Progress >= 100.0f;
+
+        public string Path { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
