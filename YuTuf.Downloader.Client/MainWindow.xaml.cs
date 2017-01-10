@@ -154,7 +154,7 @@ namespace YuTuf.Downloader.Client
                     HtmlDocument document = new HtmlDocument();
                     document.LoadHtml(html);
                     var node = document.GetElementbyId("eow-title");
-                    var name = node.InnerText.Replace("\n", string.Empty);
+                    var name = WebUtility.HtmlDecode(node.InnerText.Replace("\n", string.Empty)).Trim();
                     return ClearFileName(name);
                 }
                 catch (Exception ex)
